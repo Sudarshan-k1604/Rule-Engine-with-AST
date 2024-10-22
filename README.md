@@ -24,7 +24,7 @@ The **Rule Engine** is a 3-tier application designed to determine user eligibili
 
 - **Combine Rules:** Combine multiple rules into a single AST for more complex evaluations.
   
-  <img width="376" alt="image" src="">
+  <img width="376" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/combine.jpg?raw=true">
 
   
 - **Evaluate Rules:** Check if the given data meets the criteria defined by the AST.
