@@ -32,9 +32,13 @@ The **Rule Engine** is a 3-tier application designed to determine user eligibili
   <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/evaluate.jpg?raw=true">
   
   - **Update Rules**: Modify or update existing rules.
-  <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/evaluate.jpg?raw=true">
+    
+  <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/update.jpg?raw=true">
+  
    -**History Tracking**: View a complete history of rule creation, updates.
+  
     <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/evaluate.jpg?raw=true">
+    
 ## Technologies Used
 
 ### Frontend:
