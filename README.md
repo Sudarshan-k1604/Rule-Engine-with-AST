@@ -12,7 +12,7 @@ The **Rule Engine** is a 3-tier application designed to determine user eligibili
 - **Rule Creation**: Define new rules with custom logic.
 - **Rule Evaluation**: Evaluate rules dynamically against input data in JSON format.
 - **Rule Combination**: Combine existing rules using logical operators (AND, OR) to create complex conditions.
-- **History Tracking**: View a complete history of rule creation, updates, and evaluations.
+- **History Tracking**: View a complete history of rule creation, updates.
 - **Update Rules**: Modify or update existing rules.
 - **Dynamic Management**: AST allows rules to be changed or combined on the fly.
 
@@ -29,8 +29,12 @@ The **Rule Engine** is a 3-tier application designed to determine user eligibili
   
 - **Evaluate Rules:** Check if the given data meets the criteria defined by the AST.
   
-  <img width="375" alt="image" src="">
-
+  <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/evaluate.jpg?raw=true">
+  
+  - **Update Rules**: Modify or update existing rules.
+  <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/evaluate.jpg?raw=true">
+   -**History Tracking**: View a complete history of rule creation, updates.
+    <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/evaluate.jpg?raw=true">
 ## Technologies Used
 
 ### Frontend:
