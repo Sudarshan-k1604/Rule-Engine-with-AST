@@ -37,7 +37,7 @@ The **Rule Engine** is a 3-tier application designed to determine user eligibili
   
    -**History Tracking**: View a complete history of rule creation, updates.
   
-    <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/evaluate.jpg?raw=true">
+    <img width="375" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/history.jpg?raw=true">
     
 ## Technologies Used
 
