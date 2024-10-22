@@ -19,7 +19,7 @@ The **Rule Engine** is a 3-tier application designed to determine user eligibili
 - **Create Rules:** Define rules using a string format that gets converted into an AST.
 - - **Create Rules:** Define rules using a string format that gets converted into an AST.
   
-  <img width="377" alt="image" src="">
+  <img width="377" alt="image" src="https://github.com/Sudarshan-k1604/Rule-Engine-with-AST/blob/master/create.jpg?raw=true">
 
 
 - **Combine Rules:** Combine multiple rules into a single AST for more complex evaluations.
