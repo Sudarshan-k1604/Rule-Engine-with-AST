@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Engine </title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #64748b;
+            --success: #22c55e;
+            --background: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text: #334155;
+            --heading: #1e293b;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .navbar {
+            background-color: var(--card);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: var(--background);
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .main-content {
+            background-color: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar {
+            background-color: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .history-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .history-item:hover {
+            background-color: var(--background);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-title {
+            font-weight: 600;
+            color: var(--heading);
+            margin-bottom: 0.5rem;
+        }
+
+        .history-date {
+            font-size: 0.875rem;
+            color: var(--secondary);
+        }
+
+        /* Additional styles for form elements */
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+#update-rule-form{
+    background-color : transparent;
+    input[type="text"], textarea {
+        width: 100%;
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+}
+.in{
+    background-color: #e2e8f0;
+    text-align: center;
+    padding-top: 60px;
+    justify-content: center;
+    display: flex;
+    font-size: 50px;
+}
+
+.upme{
+    background-color : white;
+}
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">Rule Engine</a>
+            
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-content">
+            <h2>Create Rule</h2>
+            <form id="create-rule-form">
+                <div>
+                    <label for="ruleName">Rule Name:</label>
+                    <input type="text" id="ruleName" name="ruleName" required placeholder="Enter rule name">
+                </div>
+                <div>
+                    <label for="ruleString">Rule:</label>
+                    <input type="text" id="ruleString" name="ruleString" required placeholder="Enter rule string">
+                </div>
+                <button type="submit">Create Rule</button>
+            </form>
+            <pre id="create-rule-result"></pre>
+
+            <h2>Combine Rules</h2>
+            <form id="combine-rules-form">
+                <div id="rules-inputs">
+                    <div class="rule-container">
+                        <div>
+                            <label for="combine-rule1">Rule 1:</label>
+                            <input type="text" id="combine-rule1" name="rule1" required placeholder="Enter first rule">
+                        </div>
+                        <div>
+                            <label for="operator1">Operator:</label>
+                            <select id="operator1" name="operator1">
+                                <option value="AND">AND</option>
+                                <option value="OR">OR</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="add-rule">Add Another Rule</button>
+                <button type="submit">Combine Rules</button>
+            </form>
+            <pre id="combine-rules-result"></pre>
+
+            <h2>Evaluate Rule</h2>
+            <form id="evaluate-rule-form">
+                <div>
+                    <label for="evaluate-ast">Rule Name:</label>
+                    <input type="text" id="evaluate-ast" name="ast" required placeholder="Enter rule name to evaluate">
+                </div>
+                <div>
+                    <label for="evaluate-data">Data JSON:</label>
+                    <textarea id="evaluate-data" name="data" required placeholder="Enter JSON data to evaluate"></textarea>
+                </div>
+                <button type="submit">Evaluate Rule</button>
+            </form>
+            <pre id="evaluate-rule-result"></pre>
+        </div>
+        
+        <div class="sidebar">
+            <h2>History Rule</h2>
+            <div id="rule-history"></div>
+        </div>
+        
+        <h2 class="in">Update Rule</h2>
+<form id="update-rule-form">
+    <div>
+        <label for="updateRuleId">Rule name:</label>
+        <input type="text" id="updateRuleId" name="ruleId" required placeholder="Enter rule name to update">
+    </div>
+    <div>
+        <label for="updateRuleName">New Rule Name:</label>
+        <input type="text" id="updateRuleName" name="ruleName" required placeholder="Enter new rule name">
+    </div>
+    <div>
+        <label for="updateRuleString">New Rule:</label>
+        <input type="text" id="updateRuleString" name="ruleString" required placeholder="Enter new rule string">
+    </div>
+    <button type="submit">Update Rule</button>
+</form>
+<pre id="update-rule-result"></pre>
+
+    </div>
+    
+    <script>
+        function generateTreeHTML(node, prefix = '', isLeft = true) {
+            if (!node) return '';
+
+            let treeHTML = '';
+            treeHTML += prefix + (isLeft ? "├── " : "└── ") + (node.type === 'operator' ? node.operator : `${node.key} ${node.operator} ${node.value}`) + '<br>';
+
+            if (node.left) treeHTML += generateTreeHTML(node.left, prefix + (isLeft ? "│   " : "    "), true);
+            if (node.right) treeHTML += generateTreeHTML(node.right, prefix + (isLeft ? "│   " : "    "), false);
+
+            return treeHTML;
+        }
+
+        function displayTree(tree) {
+            const treeHTML = generateTreeHTML(tree);
+            document.getElementById('combined-rules-tree').innerHTML = treeHTML;
+        }
+        
+        // Handle Create Rule form submission
+        /*document.getElementById('create-rule-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const ruleName = document.getElementById('ruleName').value;
+            const ruleString = document.getElementById('ruleString').value;
+            const response = await fetch('/api/rules/create_rule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ruleName, ruleString }),
+            });
+            const result = await response.json();
+            let treeHTML = generateTreeHTML(result.ruleAST);
+            treeHTML += `<br><p>Rule Name: ${result.ruleName}</p>`;
+            document.getElementById('create-rule-result').innerHTML = treeHTML;
+        });
+        */
+        // Handle Create Rule form submission
+        document.getElementById('create-rule-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+        
+            // Get the input values
+            const ruleName = document.getElementById('ruleName').value.trim();
+            const ruleString = document.getElementById('ruleString').value.trim();
+            const resultElement = document.getElementById('create-rule-result');
+        
+            // Clear any previous results or errors
+            resultElement.innerHTML = '';
+        
+            // Validate the inputs
+            if (!ruleName || !ruleString) {
+                resultElement.innerHTML = '<p style="color:red;">Error: Rule Name and Rule String must be non-empty strings.</p>';
+                return;
+            }
+        
+            try {
+                // Send the request to the server
+                const response = await fetch('/api/rules/create_rule', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ruleName, ruleString }),
+                });
+        
+                // Check if the response is OK
+                if (!response.ok) {
+                    throw new Error('Failed to create rule. Please check your input or try again later.');
+                }
+        
+                // Parse the response JSON
+                const result = await response.json();
+        
+                // Check if the result contains valid rule data
+                if (!result.ruleAST || !result.ruleName) {
+                    throw new Error('Invalid response from the server. Missing rule data.');
+                }
+        
+                // Generate the rule tree and display the result
+                let treeHTML = generateTreeHTML(result.ruleAST);
+                treeHTML += `<br><p>Rule Name: ${result.ruleName}</p>`;
+                resultElement.innerHTML = treeHTML;
+            } catch (error) {
+                // Display any errors (e.g., invalid input, server errors)
+                resultElement.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+            }
+        });
+        
+
+        async function fetchRuleHistory() {
+            try {
+                const response = await fetch('/api/rules/history');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const rules = await response.json();
+                const historyContainer = document.getElementById('rule-history');
+                historyContainer.innerHTML = ''; // Clear previous content
+            
+                rules.forEach(rule => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div class="history-title">${rule.ruleName} </div>
+                        <div class="history-date">${new Date(rule.createdAt).toLocaleString()}</div>
+                        <div class="rule-string" style="display: none;"></div> <!-- Hidden div for rule string -->
+                    `;
+                    
+                    // Add click event to toggle the display of the rule string
+                    historyItem.onclick = () => {
+                        const ruleStringDiv = historyItem.querySelector('.rule-string');
+                        if (ruleStringDiv.style.display === 'none') {
+                            ruleStringDiv.textContent = rule.ruleASTString; // Display the ruleASTString
+                            ruleStringDiv.style.display = 'block'; // Show the rule string
+                        } else {
+                            ruleStringDiv.style.display = 'none'; // Hide the rule string if clicked again
+                        }
+                    };
+            
+                    historyContainer.appendChild(historyItem);
+                });
+            } catch (error) {
+                // Display an error message to the user in the UI
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'error-message';
+                errorMessage.textContent = 'Error fetching rule history. Please try again later.';
+                document.getElementById('rule-history').appendChild(errorMessage);
+                console.error('Error fetching rule history:', error);
+            }
+        }
+        
+       
+
+        // Handle Combine Rules form submission
+        document.getElementById('combine-rules-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const op = document.getElementById('operator1').value;
+            const rules = Array.from(document.querySelectorAll('input[id^="combine-rule"]')).map(input => input.value);
+            
+            try {
+                const response = await fetch('/api/rules/combine_rules', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ rules, op }),
+                });
+        
+                // Check for a successful response
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to combine rules');
+                }
+        
+                const result = await response.json();
+                let treeHTML = generateTreeHTML(result.ruleAST);
+                treeHTML += `<br><p>Rule Name: ${result.ruleName}</p>`;
+                document.getElementById('combine-rules-result').innerHTML = treeHTML;
+        
+            } catch (error) {
+                // Handle any errors that occurred during the fetch
+                console.error('Error:', error);
+                document.getElementById('combine-rules-result').innerHTML = 'Error: ' + error.message;
+            }
+        });
+        
+        // Add functionality to dynamically add more rule inputs
+document.getElementById('add-rule').addEventListener('click', function() {
+    const ruleInputContainer = document.createElement('div');
+    ruleInputContainer.classList.add('rule-container');
+    
+    // Count the current number of rule inputs
+    const ruleCount = document.querySelectorAll('input[id^="combine-rule"]').length + 1;
+    
+    // Add new rule input
+    ruleInputContainer.innerHTML = `
+        <label for="combine-rule${ruleCount}">Rule ${ruleCount}:</label>
+        <input type="text" id="combine-rule${ruleCount}" name="rule${ruleCount}" required>
+    `;
+    
+    document.getElementById('rules-inputs').appendChild(ruleInputContainer);
+
+    // If ruleCount reaches a limit, hide the "Add Another Rule" button
+    if (ruleCount >= 2) {  // Set the limit to 3 rules, for example
+        document.getElementById('add-rule').style.display = 'none';
+    }
+});
+
+// Handle Evaluate Rule form submission
+       /* document.getElementById('evaluate-rule-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const ast = document.getElementById('evaluate-ast').value;
+            const data = document.getElementById('evaluate-data').value;
+            const response = await fetch('/api/rules/evaluate_rule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ast, data: JSON.parse(data) }),
+            });
+            const result = await response.json();
+            document.getElementById('evaluate-rule-result').textContent = JSON.stringify(result, null, 2);
+        });
+        */
+        document.getElementById('evaluate-rule-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+        
+            // Get the input values
+            const ast = document.getElementById('evaluate-ast').value;
+            const data = document.getElementById('evaluate-data').value;
+            const resultElement = document.getElementById('evaluate-rule-result');
+        
+            // Clear any previous results or errors
+            resultElement.textContent = '';
+        
+            // Validate AST and data input
+            if (!ast || !data) {
+                resultElement.textContent = 'Error: Please provide both AST and Data inputs.';
+                return;
+            }
+        
+            try {
+                // Parse the data input as JSON
+                const parsedData = JSON.parse(data);
+        
+                // Send the request to the server
+                const response = await fetch('/api/rules/evaluate_rule', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ast, data: parsedData }),
+                });
+        
+                // Check if the response is OK
+                if (!response.ok) {
+                    throw new Error('Failed to evaluate the rule. Please check your input or try again.');
+                }
+        
+                // Parse the response JSON
+                const result = await response.json();
+        
+                // Display the result in the result element
+                resultElement.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                // Handle any errors (invalid JSON, server errors, etc.)
+                resultElement.textContent = `Error: ${error.message}`;
+            }
+        });
+        
+        // Rest of your existing event listeners...
+
+        // Initialize history on page load
+        document.addEventListener('DOMContentLoaded', fetchRuleHistory);
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.querySelector(`h2:contains('${targetId}')`);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Handle Update Rule form submission
+        
+        document.getElementById('update-rule-form').onsubmit = async (e) => {
+            e.preventDefault();
+        
+            // Get the input values
+            const updateRuleId = document.getElementById('updateRuleId').value.trim(); // Rule ID
+            const newRuleName = document.getElementById('updateRuleName').value.trim(); // New Rule Name
+            const newRuleString = document.getElementById('updateRuleString').value.trim(); // New Rule String
+            const resultElement = document.getElementById('update-rule-result');
+        
+            // Clear any previous results or errors
+            resultElement.innerHTML = '';
+        
+            // Validate the inputs
+            if (!updateRuleId || !newRuleName || !newRuleString) {
+                resultElement.innerHTML = '<p style="color:red;">Error: All fields must be filled out.</p>';
+                return;
+            }
+        
+            try {
+                // Send the request to the server
+                const response = await fetch('/api/rules/update_rule', {
+                    method: 'PUT', // Using PUT for updates
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        ruleName: updateRuleId, // Existing rule name to find
+                        newRuleName: newRuleName,  // New name to update to
+                        newRuleString: newRuleString // New rule string content
+                    }),
+                });
+        
+                // Check if the response is OK
+                if (!response.ok) {
+                    throw new Error('Failed to update rule. Please check your input or try again later.');
+                }
+        
+                // Parse the response JSON
+                const result = await response.json();
+        
+                // Display success message or updated rule data
+                resultElement.innerHTML = `<p>Rule Updated Successfully: ${result.updatedRuleName}</p>`;
+            } catch (error) {
+                // Display any errors (e.g., invalid input, server errors)
+                resultElement.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+            }
+        };
+        
+    </script>
+</body>
+</html>
